@@ -2,7 +2,7 @@ import { IDepartment, IMeta } from "@/types";
 import { tagTypes } from "../tag-types";
 import { baseApi } from "./baseApi";
 
-const DEPARTMENT_URL = "/management-departments";
+const DEPARTMENT_URL = "/management-department";
 
 export const departmentApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -23,7 +23,7 @@ export const departmentApi = baseApi.injectEndpoints({
 
     addDepartment: build.mutation({
       query: (data) => ({
-        url: DEPARTMENT_URL,
+        url: `${DEPARTMENT_URL}/create`,
         method: "POST",
         data,
       }),
@@ -42,8 +42,8 @@ export const departmentApi = baseApi.injectEndpoints({
     // update single department by id
     updateDepartment: build.mutation({
       query: (data) => ({
-        url: `${DEPARTMENT_URL}/${data.id}`,
-        method: "PATCH",
+        url: `${DEPARTMENT_URL}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.department],
@@ -52,7 +52,7 @@ export const departmentApi = baseApi.injectEndpoints({
     // delete single department by id
     deleteDepartment: build.mutation({
       query: (id) => ({
-        url: `${DEPARTMENT_URL}/${id}`,
+        url: `${DEPARTMENT_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.department],

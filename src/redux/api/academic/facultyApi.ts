@@ -3,7 +3,7 @@ import { IAcademicFaculty, IMeta } from "@/types";
 import { baseApi } from "../baseApi";
 import { tagTypes } from "@/redux/tag-types";
 
-const ACADEMIC_FACULTY_URL = "/academic-faculties";
+const ACADEMIC_FACULTY_URL = "/academic-faculty";
 
 export const academicFacultyApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -35,7 +35,7 @@ export const academicFacultyApi = baseApi.injectEndpoints({
     // create academic faculty api endpoint
     addAcademicFaculty: build.mutation({
       query: (data) => ({
-        url: ACADEMIC_FACULTY_URL,
+        url: `${ACADEMIC_FACULTY_URL}/create`,
         method: "POST",
         data,
       }),
@@ -44,8 +44,8 @@ export const academicFacultyApi = baseApi.injectEndpoints({
     // update academic faculty api endpoint
     updateAcademicFaculty: build.mutation({
       query: (data) => ({
-        url: `${ACADEMIC_FACULTY_URL}/${data.id}`,
-        method: "PATCH",
+        url: `${ACADEMIC_FACULTY_URL}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.academicFaculty],
@@ -53,7 +53,7 @@ export const academicFacultyApi = baseApi.injectEndpoints({
     // delete academic faculty api endpoint
     deleteAcademicFaculty: build.mutation({
       query: (id) => ({
-        url: `${ACADEMIC_FACULTY_URL}/${id}`,
+        url: `${ACADEMIC_FACULTY_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.academicFaculty],

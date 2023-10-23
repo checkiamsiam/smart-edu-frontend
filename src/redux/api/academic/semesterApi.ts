@@ -9,7 +9,7 @@ export const academicSemesterApi = baseApi.injectEndpoints({
     // create ac semester endpoint
     addAcademicSemester: build.mutation({
       query: (data) => ({
-        url: ACADEMIC_SEMESTER_URL,
+        url: `${ACADEMIC_SEMESTER_URL}/create`,
         method: "POST",
         data,
       }),
@@ -46,7 +46,7 @@ export const academicSemesterApi = baseApi.injectEndpoints({
     // update existing ac semester endpoint
     updateAcademicSemester: build.mutation({
       query: (data) => ({
-        url: `${ACADEMIC_SEMESTER_URL}/${data.id}`,
+        url: `${ACADEMIC_SEMESTER_URL}/update/${data.id}`,
         method: "PATCH",
         data: data.body,
       }),
@@ -56,7 +56,7 @@ export const academicSemesterApi = baseApi.injectEndpoints({
     // delete existing ac semester endpoint
     deleteAcademicSemester: build.mutation({
       query: (id) => ({
-        url: `${ACADEMIC_SEMESTER_URL}/${id}`,
+        url: `${ACADEMIC_SEMESTER_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.academicSemester],

@@ -31,7 +31,7 @@ const offeredCourseSectionApi = baseApi.injectEndpoints({
     }),
     addOfferedCourseSection: build.mutation({
       query: (data) => ({
-        url: BASE_OFFERED_COURSES_SECTION,
+        url: `${BASE_OFFERED_COURSES_SECTION}/create}`,
         method: "POST",
         data,
       }),
@@ -39,15 +39,15 @@ const offeredCourseSectionApi = baseApi.injectEndpoints({
     }),
     updateOfferedCourseSection: build.mutation({
       query: (data) => ({
-        url: `${BASE_OFFERED_COURSES_SECTION}/${data.id}`,
-        method: "PATCH",
+        url: `${BASE_OFFERED_COURSES_SECTION}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.offeredCourseSection],
     }),
     deleteOfferedCourseSection: build.mutation({
       query: (id) => ({
-        url: `${BASE_OFFERED_COURSES_SECTION}/${id}`,
+        url: `${BASE_OFFERED_COURSES_SECTION}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.offeredCourseSection],

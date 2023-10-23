@@ -2,7 +2,7 @@ import { IMeta, IRoom } from "@/types";
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 
-const ROOM_URL = "/rooms";
+const ROOM_URL = "/room";
 
 export const roomApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -34,7 +34,7 @@ export const roomApi = baseApi.injectEndpoints({
     // create a new room
     addRoom: build.mutation({
       query: (data) => ({
-        url: ROOM_URL,
+        url: `${ROOM_URL}/create}`,
         method: "POST",
         data,
       }),
@@ -43,8 +43,8 @@ export const roomApi = baseApi.injectEndpoints({
     // update room
     updateRoom: build.mutation({
       query: (data) => ({
-        url: `${ROOM_URL}/${data.id}`,
-        method: "PATCH",
+        url: `${ROOM_URL}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.room],
@@ -52,7 +52,7 @@ export const roomApi = baseApi.injectEndpoints({
     // delete room
     deleteRoom: build.mutation({
       query: (id) => ({
-        url: `${ROOM_URL}/${id}`,
+        url: `${ROOM_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.room],

@@ -2,7 +2,7 @@ import { IBuilding, IMeta } from "@/types";
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 
-const BUILDING_URL = "/buildings";
+const BUILDING_URL = "/building";
 
 export const buildingApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -34,7 +34,7 @@ export const buildingApi = baseApi.injectEndpoints({
     // create a new building
     addBuilding: build.mutation({
       query: (data) => ({
-        url: BUILDING_URL,
+        url: `${BUILDING_URL}/create`,
         method: "POST",
         data,
       }),
@@ -43,8 +43,8 @@ export const buildingApi = baseApi.injectEndpoints({
     // update existing building
     updateBuilding: build.mutation({
       query: (data) => ({
-        url: `${BUILDING_URL}/${data.id}`,
-        method: "PATCH",
+        url: `${BUILDING_URL}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.building],
@@ -52,7 +52,7 @@ export const buildingApi = baseApi.injectEndpoints({
     // delete existing building
     deleteBuilding: build.mutation({
       query: (id) => ({
-        url: `${BUILDING_URL}/${id}`,
+        url: `${BUILDING_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.building],

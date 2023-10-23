@@ -2,7 +2,7 @@ import { tagTypes } from "@/redux/tag-types";
 import { IAcademicDepartment, IMeta } from "@/types";
 import { baseApi } from "../baseApi";
 
-const ACADEMIC_DEPARTMENT_URL = "/academic-departments";
+const ACADEMIC_DEPARTMENT_URL = "/academic-department";
 
 export const academicDepartmentApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -34,7 +34,7 @@ export const academicDepartmentApi = baseApi.injectEndpoints({
     // create a new academic department
     addAcademicDepartment: build.mutation({
       query: (data) => ({
-        url: ACADEMIC_DEPARTMENT_URL,
+        url: `${ACADEMIC_DEPARTMENT_URL}/create`,
         method: "POST",
         data,
       }),
@@ -43,8 +43,8 @@ export const academicDepartmentApi = baseApi.injectEndpoints({
     // update ac department
     updateAcademicDepartment: build.mutation({
       query: (data) => ({
-        url: `${ACADEMIC_DEPARTMENT_URL}/${data.id}`,
-        method: "PATCH",
+        url: `${ACADEMIC_DEPARTMENT_URL}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.academicDepartment],
@@ -53,7 +53,7 @@ export const academicDepartmentApi = baseApi.injectEndpoints({
     // delete ac department
     deleteAcademicDepartment: build.mutation({
       query: (id) => ({
-        url: `${ACADEMIC_DEPARTMENT_URL}/${id}`,
+        url: `${ACADEMIC_DEPARTMENT_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.academicDepartment],

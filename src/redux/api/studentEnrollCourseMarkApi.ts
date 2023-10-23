@@ -1,6 +1,6 @@
 import { IMeta, IStudentEnrolledCourseMark } from "@/types";
-import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
+import { baseApi } from "./baseApi";
 
 export const BASE_STUDENT_COURSE_MARKS = "/student-enrolled-course-marks";
 
@@ -14,10 +14,7 @@ const studentEnrollCourseMarkApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
-      transformResponse: (
-        response: IStudentEnrolledCourseMark[],
-        meta: IMeta
-      ) => {
+      transformResponse: (response: IStudentEnrolledCourseMark[], meta: IMeta) => {
         return {
           myMarks: response,
           meta,
@@ -33,10 +30,7 @@ const studentEnrollCourseMarkApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
-      transformResponse: (
-        response: IStudentEnrolledCourseMark[],
-        meta: IMeta
-      ) => {
+      transformResponse: (response: IStudentEnrolledCourseMark[], meta: IMeta) => {
         return {
           studentEnrolledCourseMarks: response,
           meta,
@@ -55,7 +49,7 @@ const studentEnrollCourseMarkApi = baseApi.injectEndpoints({
     updateFinalMarks: build.mutation({
       query: (data) => ({
         url: `${BASE_STUDENT_COURSE_MARKS}/update-course-final-marks`,
-        method: "POST",
+        method: "PATCH",
         data,
       }),
       invalidatesTags: [tagTypes.student],
@@ -63,11 +57,7 @@ const studentEnrollCourseMarkApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useUpdateMarksMutation,
-  useMyMarksQuery,
-  useStudentEnrolledCourseMarksQuery,
-  useUpdateFinalMarksMutation,
-} = studentEnrollCourseMarkApi;
+export const { useUpdateMarksMutation, useMyMarksQuery, useStudentEnrolledCourseMarksQuery, useUpdateFinalMarksMutation } =
+  studentEnrollCourseMarkApi;
 
 export default studentEnrollCourseMarkApi;

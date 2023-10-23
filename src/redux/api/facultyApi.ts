@@ -2,7 +2,7 @@ import { ICoreFaculty, IFaculty, IFacultyCourse, IMeta } from "@/types";
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 
-const BASE_FACULTY_API_URL = "/faculties";
+const BASE_FACULTY_API_URL = "/faculty";
 
 export const facultyApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -44,8 +44,8 @@ export const facultyApi = baseApi.injectEndpoints({
     // update faculty user endpoint
     updateFaculty: build.mutation({
       query: (data) => ({
-        url: `${BASE_FACULTY_API_URL}/${data.id}`,
-        method: "PATCH",
+        url: `${BASE_FACULTY_API_URL}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.faculty],
@@ -53,7 +53,7 @@ export const facultyApi = baseApi.injectEndpoints({
     // delete faculty user endpoint
     deleteFaculty: build.mutation({
       query: (id) => ({
-        url: `${BASE_FACULTY_API_URL}/${id}`,
+        url: `${BASE_FACULTY_API_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.faculty],

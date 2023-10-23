@@ -2,7 +2,7 @@ import { ICourse, IMeta } from "@/types";
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 
-const COURSE_URL = "/courses";
+const COURSE_URL = "/course";
 
 export const courseApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -34,7 +34,7 @@ export const courseApi = baseApi.injectEndpoints({
     // create
     addCourse: build.mutation({
       query: (data) => ({
-        url: COURSE_URL,
+        url: `${COURSE_URL}/create`,
         method: "POST",
         data,
       }),
@@ -43,8 +43,8 @@ export const courseApi = baseApi.injectEndpoints({
     // update
     updateCourse: build.mutation({
       query: (data) => ({
-        url: `${COURSE_URL}/${data.id}`,
-        method: "PATCH",
+        url: `${COURSE_URL}/update/${data.id}`,
+        method: "PUT",
         data: data.body,
       }),
       invalidatesTags: [tagTypes.course],
@@ -52,7 +52,7 @@ export const courseApi = baseApi.injectEndpoints({
     // delete
     deleteCourse: build.mutation({
       query: (id) => ({
-        url: `${COURSE_URL}/${id}`,
+        url: `${COURSE_URL}/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: [tagTypes.course],
