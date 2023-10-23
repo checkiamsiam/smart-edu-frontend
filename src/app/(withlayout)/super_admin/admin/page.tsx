@@ -84,7 +84,7 @@ const AdminPage = () => {
     },
     {
       title: "Action",
-      dataIndex: "id",
+      dataIndex: "_id",
       render: function (data: any) {
         // console.log(data);
         return (
