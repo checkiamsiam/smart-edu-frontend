@@ -78,7 +78,7 @@ const ManageDepartmentPage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
+            <Button onClick={() => deleteHandler(data?._id)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>

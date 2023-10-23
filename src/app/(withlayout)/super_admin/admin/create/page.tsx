@@ -27,7 +27,7 @@ const CreateAdminPage = () => {
     departments?.map((department) => {
       return {
         label: department?.title,
-        value: department?.id,
+        value: department?._id,
       };
     });
 
