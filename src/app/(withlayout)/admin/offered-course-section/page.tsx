@@ -1,23 +1,16 @@
 "use client";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UMTable from "@/components/ui/UMTable";
+import { DeleteOutlined, EditOutlined, ReloadOutlined } from "@ant-design/icons";
 
-import { Button, Input, message } from "antd";
-import Link from "next/link";
-import { useState } from "react";
 import ActionBar from "@/components/ui/ActionBar";
 import { useDebounced } from "@/redux/hooks";
+import { Button, Input, message } from "antd";
 import dayjs from "dayjs";
+import Link from "next/link";
+import { useState } from "react";
 
-import {
-  useDeleteOfferedCourseMutation,
-  useOfferedCoursesQuery,
-} from "@/redux/api/offeredCourseApi";
+import { useDeleteOfferedCourseMutation } from "@/redux/api/offeredCourseApi";
 import { useOfferedCourseSectionsQuery } from "@/redux/api/offeredCourseSectionApi";
 
 const OfferedCourseSectionPage = () => {
@@ -32,9 +25,7 @@ const OfferedCourseSectionPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
-  // query["searchTerm"] = searchTerm;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,
@@ -42,7 +33,7 @@ const OfferedCourseSectionPage = () => {
   });
 
   if (!!debouncedTerm) {
-    query["searchTerm"] = debouncedTerm;
+    query["searchKey"] = debouncedTerm;
   }
   const { data, isLoading } = useOfferedCourseSectionsQuery({ ...query });
 
@@ -111,11 +102,7 @@ const OfferedCourseSectionPage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button
-              onClick={() => deleteHandler(data?.id)}
-              type="primary"
-              danger
-            >
+            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>
@@ -170,11 +157,7 @@ const OfferedCourseSectionPage = () => {
             <Button type="primary">Create</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              onClick={resetFilters}
-              type="primary"
-              style={{ margin: "0px 5px" }}
-            >
+            <Button onClick={resetFilters} type="primary" style={{ margin: "0px 5px" }}>
               <ReloadOutlined />
             </Button>
           )}

@@ -1,22 +1,14 @@
 "use client";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
+import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UMTable from "@/components/ui/UMTable";
-import {
-  useDeleteDepartmentMutation,
-  useDepartmentsQuery,
-} from "@/redux/api/departmentApi";
+import { useDeleteDepartmentMutation, useDepartmentsQuery } from "@/redux/api/departmentApi";
+import { useDebounced } from "@/redux/hooks";
+import { DeleteOutlined, EditOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Button, Input, message } from "antd";
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useState } from "react";
-import ActionBar from "@/components/ui/ActionBar";
-import { useDebounced } from "@/redux/hooks";
-import dayjs from "dayjs";
 
 const ManageDepartmentPage = () => {
   const query: Record<string, any> = {};
@@ -30,9 +22,7 @@ const ManageDepartmentPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
-  // query["searchTerm"] = searchTerm;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,
@@ -40,7 +30,7 @@ const ManageDepartmentPage = () => {
   });
 
   if (!!debouncedTerm) {
-    query["searchTerm"] = debouncedTerm;
+    query["searchKey"] = debouncedTerm;
   }
   const { data, isLoading } = useDepartmentsQuery({ ...query });
 
@@ -88,11 +78,7 @@ const ManageDepartmentPage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button
-              onClick={() => deleteHandler(data?.id)}
-              type="primary"
-              danger
-            >
+            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>
@@ -147,11 +133,7 @@ const ManageDepartmentPage = () => {
             <Button type="primary">Create</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              onClick={resetFilters}
-              type="primary"
-              style={{ margin: "0px 5px" }}
-            >
+            <Button onClick={resetFilters} type="primary" style={{ margin: "0px 5px" }}>
               <ReloadOutlined />
             </Button>
           )}

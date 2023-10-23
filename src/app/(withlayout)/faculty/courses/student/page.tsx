@@ -1,13 +1,13 @@
 "use client";
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input } from "antd";
-import { ReloadOutlined } from "@ant-design/icons";
-import { useState } from "react";
-import { useDebounced } from "@/redux/hooks";
 import UMTable from "@/components/ui/UMTable";
 import { useFacultyCourseStudentsQuery } from "@/redux/api/facultyApi";
+import { useDebounced } from "@/redux/hooks";
+import { ReloadOutlined } from "@ant-design/icons";
+import { Button, Input } from "antd";
 import Link from "next/link";
+import { useState } from "react";
 
 const FacultyCoursesStudentsPage = ({ searchParams }: Record<string, any>) => {
   //   console.log(searchParams);
@@ -23,8 +23,7 @@ const FacultyCoursesStudentsPage = ({ searchParams }: Record<string, any>) => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   if (!!courseId) {
     query["courseId"] = courseId;
@@ -39,7 +38,7 @@ const FacultyCoursesStudentsPage = ({ searchParams }: Record<string, any>) => {
   });
 
   if (!!debouncedSearchTerm) {
-    query["searchTerm"] = debouncedSearchTerm;
+    query["searchKey"] = debouncedSearchTerm;
   }
   const { data, isLoading } = useFacultyCourseStudentsQuery({ ...query });
 
@@ -79,9 +78,7 @@ const FacultyCoursesStudentsPage = ({ searchParams }: Record<string, any>) => {
       render: function (data: any) {
         return (
           <div key="1" style={{ margin: "20px 0px" }}>
-            <Link
-              href={`/faculty/student-result?studentId=${data.id}&courseId=${courseId}&offeredCourseSectionId=${offeredCourseSectionId}`}
-            >
+            <Link href={`/faculty/student-result?studentId=${data.id}&courseId=${courseId}&offeredCourseSectionId=${offeredCourseSectionId}`}>
               <Button type="primary">View Marks</Button>
             </Link>
           </div>
@@ -131,11 +128,7 @@ const FacultyCoursesStudentsPage = ({ searchParams }: Record<string, any>) => {
         />
         <div>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              style={{ margin: "0px 5px" }}
-              type="primary"
-              onClick={resetFilters}
-            >
+            <Button style={{ margin: "0px 5px" }} type="primary" onClick={resetFilters}>
               <ReloadOutlined />
             </Button>
           )}

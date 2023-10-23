@@ -1,26 +1,17 @@
 "use client";
 import ActionBar from "@/components/ui/ActionBar";
-import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input, Tag, message } from "antd";
-import Link from "next/link";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  FilterOutlined,
-  ReloadOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import { Fragment, useState } from "react";
-import { useDebounced } from "@/redux/hooks";
-import UMTable from "@/components/ui/UMTable";
-import dayjs from "dayjs";
 import BaseRow from "@/components/ui/BaseRow";
+import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
+import UMTable from "@/components/ui/UMTable";
 import { ExamType } from "@/constants/global";
-import {
-  useStudentEnrolledCourseMarksQuery,
-  useUpdateFinalMarksMutation,
-} from "@/redux/api/studentEnrollCourseMarkApi";
+import { useStudentEnrolledCourseMarksQuery, useUpdateFinalMarksMutation } from "@/redux/api/studentEnrollCourseMarkApi";
+import { useDebounced } from "@/redux/hooks";
 import { IStudentEnrolledCourseMark } from "@/types";
+import { ReloadOutlined } from "@ant-design/icons";
+import { Button, Input, Tag, message } from "antd";
+import dayjs from "dayjs";
+import Link from "next/link";
+import { Fragment, useState } from "react";
 
 const StudentResultPage = ({ searchParams }: Record<string, any>) => {
   const [updateFinalMarks] = useUpdateFinalMarksMutation();
@@ -38,8 +29,7 @@ const StudentResultPage = ({ searchParams }: Record<string, any>) => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedSearchTerm = useDebounced({
     searchQuery: searchTerm,
@@ -47,7 +37,7 @@ const StudentResultPage = ({ searchParams }: Record<string, any>) => {
   });
 
   if (!!debouncedSearchTerm) {
-    query["searchTerm"] = debouncedSearchTerm;
+    query["searchKey"] = debouncedSearchTerm;
   }
 
   if (!!studentId || !!courseId || !!offeredCourseSectionId) {
@@ -108,11 +98,7 @@ const StudentResultPage = ({ searchParams }: Record<string, any>) => {
       dataIndex: "examType",
       sorter: true,
       render: function (data: any) {
-        return (
-          <Tag color={data === ExamType.MIDTERM ? "magenta" : "blue"}>
-            {data}
-          </Tag>
-        );
+        return <Tag color={data === ExamType.MIDTERM ? "magenta" : "blue"}>{data}</Tag>;
       },
     },
     {
@@ -188,11 +174,7 @@ const StudentResultPage = ({ searchParams }: Record<string, any>) => {
         />
         <div>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              style={{ margin: "0px 5px" }}
-              type="primary"
-              onClick={resetFilters}
-            >
+            <Button style={{ margin: "0px 5px" }} type="primary" onClick={resetFilters}>
               <ReloadOutlined />
             </Button>
           )}
@@ -200,9 +182,7 @@ const StudentResultPage = ({ searchParams }: Record<string, any>) => {
 
         <div style={{ marginLeft: "auto" }}>
           {data?.studentEnrolledCourseMarks
-            .filter(
-              (el: IStudentEnrolledCourseMark) => el.examType === ExamType.FINAL
-            )
+            .filter((el: IStudentEnrolledCourseMark) => el.examType === ExamType.FINAL)
             .map((el, index) => {
               if (el.marks > 0) {
                 return (

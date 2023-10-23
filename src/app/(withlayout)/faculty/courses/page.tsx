@@ -1,14 +1,14 @@
 "use client";
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
+import UMTable from "@/components/ui/UMTable";
+import { useFacultyCoursesQuery } from "@/redux/api/facultyApi";
+import { useDebounced } from "@/redux/hooks";
+import { IOfferedCourseSchedule, IOfferedCourseSection } from "@/types";
+import { ReloadOutlined } from "@ant-design/icons";
 import { Button, Input } from "antd";
 import Link from "next/link";
-import { ReloadOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useDebounced } from "@/redux/hooks";
-import UMTable from "@/components/ui/UMTable";
-import { IOfferedCourseSchedule, IOfferedCourseSection } from "@/types";
-import { useFacultyCoursesQuery } from "@/redux/api/facultyApi";
 
 const FacultyCoursesPage = () => {
   const query: Record<string, any> = {};
@@ -21,8 +21,7 @@ const FacultyCoursesPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedSearchTerm = useDebounced({
     searchQuery: searchTerm,
@@ -30,7 +29,7 @@ const FacultyCoursesPage = () => {
   });
 
   if (!!debouncedSearchTerm) {
-    query["searchTerm"] = debouncedSearchTerm;
+    query["searchKey"] = debouncedSearchTerm;
   }
   const { data, isLoading } = useFacultyCoursesQuery({ ...query });
 
@@ -77,8 +76,7 @@ const FacultyCoursesPage = () => {
               return (
                 <div key={index} style={{ margin: "20px 0px" }}>
                   <span>
-                    Sec - {el?.title} ({el?.currentlyEnrolledStudent}/
-                    {el?.maxCapacity})
+                    Sec - {el?.title} ({el?.currentlyEnrolledStudent}/{el?.maxCapacity})
                   </span>
                 </div>
               );
@@ -91,16 +89,13 @@ const FacultyCoursesPage = () => {
     {
       title: "Action",
       render: function (data: any) {
-        const section: IOfferedCourseSection[] | undefined =
-          data?.sections?.map((el: any) => el?.section);
+        const section: IOfferedCourseSection[] | undefined = data?.sections?.map((el: any) => el?.section);
         return (
           <>
             {section?.map((el: IOfferedCourseSection, index: number) => {
               return (
                 <div key={index} style={{ margin: "20px 0px" }}>
-                  <Link
-                    href={`/faculty/courses/student?courseId=${data?.course?.id}&offeredCourseSectionId=${el?.id}`}
-                  >
+                  <Link href={`/faculty/courses/student?courseId=${data?.course?.id}&offeredCourseSectionId=${el?.id}`}>
                     <Button type="primary">View all students</Button>
                   </Link>
                 </div>
@@ -149,11 +144,7 @@ const FacultyCoursesPage = () => {
         />
         <div>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              style={{ margin: "0px 5px" }}
-              type="primary"
-              onClick={resetFilters}
-            >
+            <Button style={{ margin: "0px 5px" }} type="primary" onClick={resetFilters}>
               <ReloadOutlined />
             </Button>
           )}

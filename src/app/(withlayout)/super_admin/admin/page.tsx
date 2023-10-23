@@ -1,22 +1,16 @@
 "use client";
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input, message } from "antd";
-import Link from "next/link";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  FilterOutlined,
-  ReloadOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import { useState } from "react";
-import { useDebounced } from "@/redux/hooks";
+import UMModal from "@/components/ui/UMModal";
 import UMTable from "@/components/ui/UMTable";
 import { useAdminsQuery, useDeleteAdminMutation } from "@/redux/api/adminApi";
+import { useDebounced } from "@/redux/hooks";
 import { IDepartment } from "@/types";
+import { DeleteOutlined, EditOutlined, EyeOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Button, Input, message } from "antd";
 import dayjs from "dayjs";
-import UMModal from "@/components/ui/UMModal";
+import Link from "next/link";
+import { useState } from "react";
 
 const AdminPage = () => {
   const query: Record<string, any> = {};
@@ -32,8 +26,7 @@ const AdminPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedSearchTerm = useDebounced({
     searchQuery: searchTerm,
@@ -41,7 +34,7 @@ const AdminPage = () => {
   });
 
   if (!!debouncedSearchTerm) {
-    query["searchTerm"] = debouncedSearchTerm;
+    query["searchKey"] = debouncedSearchTerm;
   }
   const { data, isLoading } = useAdminsQuery({ ...query });
 
@@ -183,11 +176,7 @@ const AdminPage = () => {
             <Button type="primary">Create Admin</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              style={{ margin: "0px 5px" }}
-              type="primary"
-              onClick={resetFilters}
-            >
+            <Button style={{ margin: "0px 5px" }} type="primary" onClick={resetFilters}>
               <ReloadOutlined />
             </Button>
           )}
@@ -206,12 +195,7 @@ const AdminPage = () => {
         showPagination={true}
       />
 
-      <UMModal
-        title="Remove admin"
-        isOpen={open}
-        closeModal={() => setOpen(false)}
-        handleOk={() => deleteAdminHandler(adminId)}
-      >
+      <UMModal title="Remove admin" isOpen={open} closeModal={() => setOpen(false)} handleOk={() => deleteAdminHandler(adminId)}>
         <p className="my-5">Do you want to remove this admin?</p>
       </UMModal>
     </div>

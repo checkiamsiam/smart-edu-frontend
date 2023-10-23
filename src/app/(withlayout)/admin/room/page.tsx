@@ -1,19 +1,15 @@
 "use client";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UMTable from "@/components/ui/UMTable";
+import { DeleteOutlined, EditOutlined, ReloadOutlined } from "@ant-design/icons";
 
+import ActionBar from "@/components/ui/ActionBar";
+import { useDeleteRoomMutation, useRoomsQuery } from "@/redux/api/roomApi";
+import { useDebounced } from "@/redux/hooks";
 import { Button, Input, message } from "antd";
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useState } from "react";
-import ActionBar from "@/components/ui/ActionBar";
-import { useDebounced } from "@/redux/hooks";
-import dayjs from "dayjs";
-import { useDeleteRoomMutation, useRoomsQuery } from "@/redux/api/roomApi";
 
 const RoomPage = () => {
   const query: Record<string, any> = {};
@@ -27,9 +23,7 @@ const RoomPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
-  // query["searchTerm"] = searchTerm;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,
@@ -37,7 +31,7 @@ const RoomPage = () => {
   });
 
   if (!!debouncedTerm) {
-    query["searchTerm"] = debouncedTerm;
+    query["searchKey"] = debouncedTerm;
   }
   const { data, isLoading } = useRoomsQuery({ ...query });
 
@@ -100,11 +94,7 @@ const RoomPage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button
-              onClick={() => deleteHandler(data?.id)}
-              type="primary"
-              danger
-            >
+            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>
@@ -159,11 +149,7 @@ const RoomPage = () => {
             <Button type="primary">Create</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              onClick={resetFilters}
-              type="primary"
-              style={{ margin: "0px 5px" }}
-            >
+            <Button onClick={resetFilters} type="primary" style={{ margin: "0px 5px" }}>
               <ReloadOutlined />
             </Button>
           )}

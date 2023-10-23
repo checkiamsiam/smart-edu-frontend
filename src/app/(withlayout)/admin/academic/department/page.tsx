@@ -30,8 +30,7 @@ const ACDepartmentPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
   // query["searchTerm"] = searchTerm;
 
   const debouncedTerm = useDebounced({
@@ -40,7 +39,7 @@ const ACDepartmentPage = () => {
   });
 
   if (!!debouncedTerm) {
-    query["searchTerm"] = debouncedTerm;
+    query["searchKey"] = debouncedTerm;
   }
   const { data, isLoading } = useAcademicDepartmentsQuery({ ...query });
 

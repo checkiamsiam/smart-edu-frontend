@@ -1,20 +1,15 @@
 "use client";
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input } from "antd";
-import Link from "next/link";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ReloadOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import { useState } from "react";
-import { useDebounced } from "@/redux/hooks";
 import UMTable from "@/components/ui/UMTable";
-import { IDepartment } from "@/types";
-import dayjs from "dayjs";
 import { useFacultiesQuery } from "@/redux/api/facultyApi";
+import { useDebounced } from "@/redux/hooks";
+import { IDepartment } from "@/types";
+import { DeleteOutlined, EditOutlined, EyeOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Button, Input } from "antd";
+import dayjs from "dayjs";
+import Link from "next/link";
+import { useState } from "react";
 
 const FacultyPage = () => {
   const query: Record<string, any> = {};
@@ -27,8 +22,7 @@ const FacultyPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedSearchTerm = useDebounced({
     searchQuery: searchTerm,
@@ -36,7 +30,7 @@ const FacultyPage = () => {
   });
 
   if (!!debouncedSearchTerm) {
-    query["searchTerm"] = debouncedSearchTerm;
+    query["searchKey"] = debouncedSearchTerm;
   }
   const { data, isLoading } = useFacultiesQuery({ ...query });
 
@@ -155,11 +149,7 @@ const FacultyPage = () => {
             <Button type="primary">Create</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              style={{ margin: "0px 5px" }}
-              type="primary"
-              onClick={resetFilters}
-            >
+            <Button style={{ margin: "0px 5px" }} type="primary" onClick={resetFilters}>
               <ReloadOutlined />
             </Button>
           )}

@@ -1,24 +1,19 @@
 "use client";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ReloadOutlined,
-  PlayCircleOutlined,
-} from "@ant-design/icons";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UMTable from "@/components/ui/UMTable";
+import { DeleteOutlined, EditOutlined, PlayCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 
-import { Button, Input, Tooltip, message } from "antd";
-import Link from "next/link";
-import { useState } from "react";
 import ActionBar from "@/components/ui/ActionBar";
-import { useDebounced } from "@/redux/hooks";
-import dayjs from "dayjs";
 import {
   useDeleteSemesterRegistrationsMutation,
   useSemesterRegistrationsQuery,
   useStartNewSemesterMutation,
 } from "@/redux/api/semesterRegistrationApi";
+import { useDebounced } from "@/redux/hooks";
+import { Button, Input, Tooltip, message } from "antd";
+import dayjs from "dayjs";
+import Link from "next/link";
+import { useState } from "react";
 
 const SemesterRegistrationPage = () => {
   const query: Record<string, any> = {};
@@ -28,16 +23,13 @@ const SemesterRegistrationPage = () => {
   const [sortBy, setSortBy] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [deleteSemesterRegistrations] =
-    useDeleteSemesterRegistrationsMutation();
+  const [deleteSemesterRegistrations] = useDeleteSemesterRegistrationsMutation();
 
   const [startNewSemester] = useStartNewSemesterMutation();
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
-  // query["searchTerm"] = searchTerm;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,
@@ -45,7 +37,7 @@ const SemesterRegistrationPage = () => {
   });
 
   if (!!debouncedTerm) {
-    query["searchTerm"] = debouncedTerm;
+    query["searchKey"] = debouncedTerm;
   }
   const { data, isLoading } = useSemesterRegistrationsQuery({ ...query });
 
@@ -142,11 +134,7 @@ const SemesterRegistrationPage = () => {
                 </Button>
               </Tooltip>
             )}
-            <Button
-              onClick={() => deleteHandler(data?.id)}
-              type="primary"
-              danger
-            >
+            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>
@@ -201,11 +189,7 @@ const SemesterRegistrationPage = () => {
             <Button type="primary">Create</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              onClick={resetFilters}
-              type="primary"
-              style={{ margin: "0px 5px" }}
-            >
+            <Button onClick={resetFilters} type="primary" style={{ margin: "0px 5px" }}>
               <ReloadOutlined />
             </Button>
           )}

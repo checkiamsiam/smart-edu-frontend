@@ -1,22 +1,15 @@
 "use client";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
 import UMTable from "@/components/ui/UMTable";
+import { DeleteOutlined, EditOutlined, ReloadOutlined } from "@ant-design/icons";
 
+import ActionBar from "@/components/ui/ActionBar";
+import { useCoursesQuery, useDeleteCourseMutation } from "@/redux/api/courseApi";
+import { useDebounced } from "@/redux/hooks";
 import { Button, Input, message } from "antd";
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useState } from "react";
-import ActionBar from "@/components/ui/ActionBar";
-import { useDebounced } from "@/redux/hooks";
-import dayjs from "dayjs";
-import {
-  useCoursesQuery,
-  useDeleteCourseMutation,
-} from "@/redux/api/courseApi";
 
 const CoursePage = () => {
   const query: Record<string, any> = {};
@@ -30,8 +23,7 @@ const CoursePage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
   // query["searchTerm"] = searchTerm;
 
   const debouncedTerm = useDebounced({
@@ -40,7 +32,7 @@ const CoursePage = () => {
   });
 
   if (!!debouncedTerm) {
-    query["searchTerm"] = debouncedTerm;
+    query["searchKey"] = debouncedTerm;
   }
   const { data, isLoading } = useCoursesQuery({ ...query });
 
@@ -101,11 +93,7 @@ const CoursePage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button
-              onClick={() => deleteHandler(data?.id)}
-              type="primary"
-              danger
-            >
+            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>
@@ -160,11 +148,7 @@ const CoursePage = () => {
             <Button type="primary">Create</Button>
           </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button
-              onClick={resetFilters}
-              type="primary"
-              style={{ margin: "0px 5px" }}
-            >
+            <Button onClick={resetFilters} type="primary" style={{ margin: "0px 5px" }}>
               <ReloadOutlined />
             </Button>
           )}

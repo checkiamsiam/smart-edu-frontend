@@ -1,11 +1,10 @@
 "use client";
 import ActionBar from "@/components/ui/ActionBar";
 import UMBreadCrumb from "@/components/ui/UMBreadCrumb";
-import { Button, Input } from "antd";
 
-import { useState } from "react";
 import UMTable from "@/components/ui/UMTable";
 import { useMyCoursesQuery } from "@/redux/api/studentApi";
+import { useState } from "react";
 
 const StudentCoursesPage = () => {
   const query: Record<string, any> = {};
@@ -17,8 +16,7 @@ const StudentCoursesPage = () => {
 
   query["limit"] = size;
   query["page"] = page;
-  query["sortBy"] = sortBy;
-  query["sortOrder"] = sortOrder;
+  query["sort"] = !!sortBy && !!sortOrder && sortOrder === "asc" ? sortBy : sortOrder === "desc" ? `-${sortBy}` : undefined;
 
   const { data, isLoading } = useMyCoursesQuery({ ...query });
 
