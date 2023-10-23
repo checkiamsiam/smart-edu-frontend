@@ -2,7 +2,7 @@ import { IAcademicSemester, IMeta } from "@/types";
 import { baseApi } from "../baseApi";
 import { tagTypes } from "@/redux/tag-types";
 
-const ACADEMIC_SEMESTER_URL = "/academic-semesters";
+const ACADEMIC_SEMESTER_URL = "/academic-semester";
 
 export const academicSemesterApi = baseApi.injectEndpoints({
   endpoints: (build) => ({

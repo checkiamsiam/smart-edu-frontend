@@ -21,7 +21,8 @@ export type IGenericErrorMessage = {
 };
 
 export interface IDepartment {
-  id: string;
+  _id: string;
+  id : string;
   title: string;
   createdAt: string;
   updatedAt: string;
