@@ -30,7 +30,7 @@ export const semesterRegistrationApi = baseApi.injectEndpoints({
     }),
     addSemesterRegistrations: build.mutation({
       query: (data) => ({
-        url: `${BASE_SEMESTER_REGISTRATION}/create}`,
+        url: `${BASE_SEMESTER_REGISTRATION}/create`,
         method: "POST",
         data,
       }),

@@ -92,7 +92,7 @@ const ACSemesterPage = () => {
       render: function (data: any) {
         return (
           <>
-            <Link href={`/admin/academic/semester/edit/${data?.id}`}>
+            <Link href={`/admin/academic/semester/edit/${data}`}>
               <Button
                 style={{
                   margin: "0px 5px",
@@ -103,7 +103,7 @@ const ACSemesterPage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
+            <Button onClick={() => deleteHandler(data)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>

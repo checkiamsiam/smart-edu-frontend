@@ -17,6 +17,7 @@ const CreateOfferedCoursePage = () => {
   const { data, isLoading } = useSemesterRegistrationsQuery({
     limit: 10,
     page: 1,
+    populate: ["academicSemester"],
   });
 
   const semesterRegistrations = data?.semesterRegistrations;

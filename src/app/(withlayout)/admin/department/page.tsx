@@ -65,10 +65,11 @@ const ManageDepartmentPage = () => {
     },
     {
       title: "Action",
+      dataIndex: "_id",
       render: function (data: any) {
         return (
           <>
-            <Link href={`/admin/department/edit/${data?.id}`}>
+            <Link href={`/admin/department/edit/${data}`}>
               <Button
                 style={{
                   margin: "0px 5px",
@@ -79,7 +80,7 @@ const ManageDepartmentPage = () => {
                 <EditOutlined />
               </Button>
             </Link>
-            <Button onClick={() => deleteHandler(data?.id)} type="primary" danger>
+            <Button onClick={() => deleteHandler(data)} type="primary" danger>
               <DeleteOutlined />
             </Button>
           </>

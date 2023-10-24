@@ -34,7 +34,7 @@ export const roomApi = baseApi.injectEndpoints({
     // create a new room
     addRoom: build.mutation({
       query: (data) => ({
-        url: `${ROOM_URL}/create}`,
+        url: `${ROOM_URL}/create`,
         method: "POST",
         data,
       }),

@@ -34,7 +34,7 @@ const OfferedCoursePage = () => {
   if (!!debouncedTerm) {
     query["searchKey"] = debouncedTerm;
   }
-  const { data, isLoading } = useOfferedCoursesQuery({ ...query });
+  const { data, isLoading } = useOfferedCoursesQuery({ ...query , populate: "course,academicDepartment" });
 
   const offeredCourses = data?.offeredCourses;
   const meta = data?.meta;

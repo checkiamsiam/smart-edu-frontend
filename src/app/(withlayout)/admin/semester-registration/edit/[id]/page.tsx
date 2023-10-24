@@ -71,7 +71,7 @@ const EditSemesterRegistration = ({ params }: { params: any }) => {
   const defaultValues = {
     startDate: data?.startDate || "",
     endDate: data?.endDate || "",
-    academicSemesterId: data?.academicSemester?.id || "",
+    academicSemesterId: data?.academicSemesterId || "",
     minCredit: data?.minCredit || "",
     maxCredit: data?.maxCredit || "",
     status: data?.status || "",
