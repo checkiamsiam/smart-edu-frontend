@@ -108,6 +108,7 @@ const SemesterRegistrationPage = () => {
     },
     {
       title: "Action",
+      
       render: function (data: any) {
         return (
           <>
