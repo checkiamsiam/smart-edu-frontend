@@ -31,6 +31,7 @@ const CreateOfferedCourseSectionPage = () => {
     limit: 10,
     page: 1,
     ...query,
+    populate: ["course"],
   });
 
   const offeredCourses = data?.offeredCourses;

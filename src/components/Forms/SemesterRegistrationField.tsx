@@ -16,6 +16,7 @@ const SemesterRegistrationField = ({
   const { data, isLoading } = useSemesterRegistrationsQuery({
     limit: 100,
     page: 1,
+    populate: ["academicSemester"],
   });
   const semesterRegistrations = data?.semesterRegistrations;
   const semesterRegistrationsOptions = semesterRegistrations?.map(

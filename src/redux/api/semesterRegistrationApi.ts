@@ -2,6 +2,7 @@ import { IMeta, ISemesterRegistration } from "@/types";
 import { baseApi } from "./baseApi";
 import { tagTypes } from "../tag-types";
 
+
 const BASE_SEMESTER_REGISTRATION = "/semester-registration";
 export const semesterRegistrationApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -66,7 +67,7 @@ export const semesterRegistrationApi = baseApi.injectEndpoints({
     }),
     mySemesterRegistrationCourses: build.query({
       query: () => ({
-        url: `${BASE_SEMESTER_REGISTRATION}/my-semester-registration-courses
+        url: `${BASE_SEMESTER_REGISTRATION}/get-my-semester-courses
 				`,
         method: "GET",
       }),
@@ -90,7 +91,7 @@ export const semesterRegistrationApi = baseApi.injectEndpoints({
     }),
     confirmMyRegistration: build.mutation({
       query: () => ({
-        url: `${BASE_SEMESTER_REGISTRATION}/confirm-registration`,
+        url: `${BASE_SEMESTER_REGISTRATION}/confirm-my-registration`,
         method: "POST",
       }),
       invalidatesTags: [tagTypes.courseRegistration],

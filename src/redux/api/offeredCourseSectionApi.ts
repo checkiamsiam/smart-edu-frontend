@@ -31,7 +31,7 @@ const offeredCourseSectionApi = baseApi.injectEndpoints({
     }),
     addOfferedCourseSection: build.mutation({
       query: (data) => ({
-        url: `${BASE_OFFERED_COURSES_SECTION}/create}`,
+        url: `${BASE_OFFERED_COURSES_SECTION}/create`,
         method: "POST",
         data,
       }),
